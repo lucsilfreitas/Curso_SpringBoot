@@ -12,7 +12,7 @@
 <body>
 <form action="salvarpessoa" method="post" th:object="${pessoaobject}">
 <label>ID</label>
-<input name="id" th:field="*{id}">
+<input name="id" th:field="*{id}"> 
 <label> Nome</label>
 <input name="nome" th:field="*{nome}">
 <label>Sobrenome</label>
@@ -34,7 +34,7 @@
 <td th:text = "${pessoa.sobrenome}"></td> 
 <td th:text = "${pessoa.sexo}"></td> 
 <td th:text = "${pessoa.idade}"></td> 
-<td><a th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a></td>
+<td><a th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a> </td>
 </tr>
 
 </table>

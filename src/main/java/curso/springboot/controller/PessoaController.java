@@ -25,7 +25,7 @@ public class PessoaController {
 	@RequestMapping(method = RequestMethod.GET, value="cadastropessoa")
 	public ModelAndView inicio() {
 		ModelAndView modelandView = new ModelAndView("cadastro/cadastropessoa");
-		modelandView.addObject("pessoaobj", new Pessoa());
+		modelandView.addObject("pessoaobject", new Pessoa());
 		return modelandView;
 	}
 	
@@ -36,7 +36,7 @@ public class PessoaController {
 		ModelAndView andView = new ModelAndView("cadastro/cadastropessoa");
 		Iterable<Pessoa> pessoaIt = pessoaRepository.findAll();
 		andView.addObject("pessoas",pessoaIt);
-		andView.addObject("pessoaobj", new Pessoa());
+		andView.addObject("pessoaobject", new Pessoa());
 		return andView;
 		
 	
