@@ -23,12 +23,9 @@ public class Application implements WebMvcConfigurer {
 		SpringApplication.run(Application.class, args);
 	}
 	
-	//para a tela de login personalizada para redirecionar
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/login").setViewName("/login");
-		registry.setOrder(Ordered.LOWEST_PRECEDENCE);
-		
+		registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
 	}
-
 }
