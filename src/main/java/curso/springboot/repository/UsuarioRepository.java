@@ -10,6 +10,9 @@ import com.curso.springboot.model.Usuario;
 @Repository
 @Transactional
 public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
-	@Query("select u from Usuario u where u.login = ?1") 
-	Usuario findUsserByLogin(String login);
+	
+	@Query("select u from Usuario u where u.login = ?1")
+	Usuario findUserByLogin(String login);
+
 }
+

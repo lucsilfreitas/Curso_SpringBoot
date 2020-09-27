@@ -4,53 +4,53 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebConfigSecurity extends WebSecurityConfigurerAdapter{
-
-	@Autowired
-	private ImplementacaoUserDatailService implemantacaoUserDatailService;
 	
-	@Override // configura as solicitações de acesso por http
+	@Autowired
+	private ImplementacaoUserDatailService implementacaoUserDetailsService;
+	
+	@Override // Configura as solicitações de acesso por Http
 	protected void configure(HttpSecurity http) throws Exception {
-		
-				http.csrf()
-		.disable() // desativa as configurações padrão de memoria
-		.authorizeRequests() // Permite restringir acessos
-		.antMatchers(HttpMethod.GET, "/").permitAll() // qualquer usuario acessa pagina inicial
-		//.antMatchers(HttpMethod.GET, "/cadastropessoa").hasAnyRole("ADMIN")
+		http.csrf()
+		.disable() // Desativa as configurações padrão de memória.
+		.authorizeRequests() // Pertimi restringir acessos
+		.antMatchers(HttpMethod.GET, "/").permitAll() // Qualquer usuário acessa a pagina inicial
+		.antMatchers(HttpMethod.GET, "/cadastropessoa").hasAnyRole("ADMIN")
 		.anyRequest().authenticated()
-		.and().formLogin().permitAll() //; permite qualquer usuario
-		.loginPage("/login")
-		.defaultSuccessUrl("/cadastropessoa")
-		.failureUrl("/login?error=true")
-		.and().logout().logoutSuccessUrl("/login") // mapeia url de saida de logout
+		.and().formLogin().permitAll()// permite qualquer usuário
+        .loginPage("/login")
+        .defaultSuccessUrl("/cadastropessoa")
+        .failureUrl("/login?error=true")
+        .and()
+        .logout().logoutSuccessUrl("/login")
+		// Mapeia URL de Logout e invalida usuário autenticado
 		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+		
 	}
 	
-	@Override
+	
+	@Override // Cria autenticação do usuário com banco de dados ou em memória
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
-		auth.userDetailsService(implemantacaoUserDatailService)
-		.passwordEncoder(NoOpPasswordEncoder.getInstance());
-		
-		 //cria a autenicacao do user em memoria
-		/*auth.inMemoryAuthentication().passwordEncoder(NoOpPasswordEncoder.getInstance())
-		.withUser("luciano")
-		.password("1010")
-		.roles("ADMIN");*/
+		auth.userDetailsService(implementacaoUserDetailsService)
+		.passwordEncoder(new BCryptPasswordEncoder());
+	
 	}
 	
-	
-	@Override // ignora url especificas com css js
+	@Override // Ignora URL especificas
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/materialize/**");
 	}
+
 }
